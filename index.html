@@ -94,7 +94,7 @@ h2{
 
 <canvas id="fireworks"></canvas>
 
-<audio id="music" loop>
+<audio id="music" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2023/12/20/audio_9b7fbc1c91.mp3" type="audio/mpeg">
 </audio>
 
@@ -104,18 +104,25 @@ h2{
 </div>
 
 <script>
-document.getElementById("start").onclick=()=>{
-  document.getElementById("start").style.display="none";
-  document.getElementById("music").play();
+const music = document.getElementById("music");
+
+document.getElementById("start").addEventListener("click", async () => {
+  document.getElementById("start").style.display = "none";
+  try {
+    await music.play();   // FIX iOS autoplay
+  } catch(e){}
   typeText();
-};
+});
 
 const lines=[
-  "Gửi đến 💖 Công Chúa Huyền Trâm 💖",
-  "Chúc em một năm mới tràn đầy yêu thương ✨",
-  "Luôn xinh đẹp, hạnh phúc và bình an 🌸",
-  "Mọi điều ước đều thành hiện thực 💫",
-  "Luôn mỉm cười và được yêu thương thật nhiều ❤️"
+  "Happy new years !"
+"Một năm cũ đã qua, một năm mới lại đến. Anh chúc cho gia đình em luôn bình an, luôn luôn khoẻ mạnh và phát lộc, phát tài."
+"Chúc riêng em luôn vui vẻ, hạnh phúc bên gia đình và bạn bè."
+"Chúc 💖em luôn khoẻ, trẻ, xinh, đẹp và đạt được kết quả tốt trong năm học sắp tới."
+"Chúc những điều tốt lành sẽ đến với em."
+"“ Chúc em tất cả, trừ vất vả🌸“"
+"Và đây cũng là túi lộc đầu năm anh muốn gửi đến em^^"
+"Chúc em may mắn !"
 ];
 
 let i=0,j=0;
@@ -134,88 +141,6 @@ function typeText(){
     }
   }
 }
-
-// Hearts + flowers
-function spawn(cls,emoji,time,min,max){
-  const e=document.createElement("div");
-  e.className=cls;
-  e.innerHTML=emoji;
-  e.style.left=Math.random()*100+"vw";
-  e.style.animationDuration=(Math.random()*(max-min)+min)+"s";
-  document.body.appendChild(e);
-  setTimeout(()=>e.remove(),time);
-}
-setInterval(()=>spawn("heart","❤️",8000,5,9),300);
-setInterval(()=>spawn("flower","🌸",12000,7,12),700);
-
-// Fireworks
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-class Firework{
-  constructor(){
-    this.x=Math.random()*canvas.width;
-    this.y=canvas.height;
-    this.target=Math.random()*canvas.height/2;
-    this.speed=Math.random()*3+4;
-    this.exploded=false;
-    this.parts=[];
-  }
-  update(){
-    if(!this.exploded){
-      this.y-=this.speed;
-      if(this.y<=this.target){
-        this.exploded=true;
-        for(let i=0;i<70;i++) this.parts.push(new Particle(this.x,this.y));
-      }
-    } else this.parts.forEach(p=>p.update());
-  }
-  draw(){
-    if(!this.exploded){
-      ctx.fillStyle="#ffd700";
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,2,0,Math.PI*2);
-      ctx.fill();
-    } else this.parts.forEach(p=>p.draw());
-  }
-}
-
-class Particle{
-  constructor(x,y){
-    this.x=x; this.y=y;
-    this.vx=(Math.random()-0.5)*9;
-    this.vy=(Math.random()-0.5)*9;
-    this.alpha=1;
-    this.color=`hsl(${Math.random()*360},100%,65%)`;
-  }
-  update(){
-    this.x+=this.vx;
-    this.y+=this.vy;
-    this.alpha-=0.018;
-  }
-  draw(){
-    ctx.globalAlpha=this.alpha;
-    ctx.fillStyle=this.color;
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,3,0,Math.PI*2);
-    ctx.fill();
-    ctx.globalAlpha=1;
-  }
-}
-
-let fireworks=[];
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(Math.random()<0.06) fireworks.push(new Firework());
-  fireworks.forEach((f,i)=>{
-    f.update(); f.draw();
-    if(f.exploded && f.parts[0]?.alpha<=0) fireworks.splice(i,1);
-  });
-  requestAnimationFrame(animate);
-}
-animate();
 </script>
 
 </body>
