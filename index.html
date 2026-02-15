@@ -1,1 +1,214 @@
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎁 Quà Tết 2026 - Công Chúa Huyền Trâm</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  background:radial-gradient(circle at bottom,#020111,#000);
+  font-family:'Pacifico',cursive;
+  overflow:hidden;
+  text-align:center;
+  color:white;
+}
+canvas{position:fixed;inset:0;}
+
+#start{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#ff6ec4,#7873f5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:100;
+  cursor:pointer;
+}
+#start h1{
+  font-size:2.6em;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+
+.container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:100%;
+  padding:20px;
+  z-index:10;
+}
+
+h2{
+  font-size:3em;
+  color:#ffd700;
+  text-shadow:0 0 20px gold,0 0 50px red;
+}
+
+#typing p{
+  font-size:1.5em;
+  color:#ffb6c1;
+  text-shadow:0 0 10px hotpink;
+  min-height:32px;
+}
+
+.heart,.flower{
+  position:absolute;
+  animation:fall linear infinite;
+}
+.heart{color:pink;font-size:20px}
+.flower{color:#ff9;font-size:22px}
+
+@keyframes fall{
+  from{transform:translateY(-10vh);opacity:1}
+  to{transform:translateY(110vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+  <h1>🎁 Nhấn để mở quà Tết 2026 🎆</h1>
+  <p>(Công Chúa Huyền Trâm)</p>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/12/20/audio_9b7fbc1c91.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <h2>🎆 Chúc Mừng Năm Mới 2026 🎆</h2>
+  <div id="typing"></div>
+</div>
+
+<script>
+document.getElementById("start").onclick=()=>{
+  document.getElementById("start").style.display="none";
+  document.getElementById("music").play();
+  typeText();
+}
+
+const lines=[
+  "Gửi đến 💖 Công Chúa Huyền Trâm 💖",
+  "Chúc em một năm mới ngập tràn yêu thương ✨",
+  "Luôn xinh đẹp – hạnh phúc – bình an 🌸",
+  "Mọi ước mơ đều thành hiện thực 💫",
+  "Luôn có người thương em thật nhiều ❤️"
+];
+
+let l=0,c=0;
+const box=document.getElementById("typing");
+
+function typeText(){
+  if(l<lines.length){
+    if(c<lines[l].length){
+      box.innerHTML+=lines[l][c++];
+      setTimeout(typeText,45);
+    }else{
+      box.innerHTML+="<br>";
+      c=0;
+      l++;
+      setTimeout(typeText,600);
+    }
+  }
+}
+
+function spawn(cls,emoji,time,min,max){
+  const e=document.createElement("div");
+  e.className=cls;
+  e.innerHTML=emoji;
+  e.style.left=Math.random()*100+"vw";
+  e.style.animationDuration=(Math.random()*(max-min)+min)+"s";
+  document.body.appendChild(e);
+  setTimeout(()=>e.remove(),time);
+}
+
+setInterval(()=>spawn("heart","❤️",8000,5,9),300);
+setInterval(()=>spawn("flower","🌸",12000,7,12),600);
+
+// Fireworks
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+class Firework{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.target=Math.random()*canvas.height/2;
+    this.speed=Math.random()*3+4;
+    this.exploded=false;
+    this.parts=[];
+  }
+  update(){
+    if(!this.exploded){
+      this.y-=this.speed;
+      if(this.y<=this.target){
+        this.exploded=true;
+        for(let i=0;i<70;i++) this.parts.push(new Particle(this.x,this.y));
+      }
+    } else this.parts.forEach(p=>p.update());
+  }
+  draw(){
+    if(!this.exploded){
+      ctx.fillStyle="gold";
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,2,0,Math.PI*2);
+      ctx.fill();
+    } else this.parts.forEach(p=>p.draw());
+  }
+}
+
+class Particle{
+  constructor(x,y){
+    this.x=x; this.y=y;
+    this.vx=(Math.random()-0.5)*9;
+    this.vy=(Math.random()-0.5)*9;
+    this.alpha=1;
+    this.color=`hsl(${Math.random()*360},100%,60%)`;
+  }
+  update(){
+    this.x+=this.vx;
+    this.y+=this.vy;
+    this.alpha-=0.018;
+  }
+  draw(){
+    ctx.globalAlpha=this.alpha;
+    ctx.fillStyle=this.color;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
+
+let fireworks=[];
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.06) fireworks.push(new Firework());
+  fireworks.forEach((f,i)=>{
+    f.update(); f.draw();
+    if(f.exploded && f.parts[0]?.alpha<=0) fireworks.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
