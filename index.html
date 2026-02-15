@@ -3,191 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧧 Lời Chúc Năm Mới 2026 🧧</title>
+<title>🧧 Happy New Year 2026 🧧</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box}
 body{
   margin:0;
-  min-height:100vh;
-  background:radial-gradient(circle at top,#3a0000,#000);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:"Segoe UI",system-ui,sans-serif;
+  background:radial-gradient(circle at bottom,#4b0000,#120000);
+  font-family:'Quicksand',sans-serif;
   overflow:hidden;
-}
-
-/* Bao lì xì */
-.envelope{
-  background:linear-gradient(180deg,#c70000,#ff2a2a);
-  width:92%;
-  max-width:460px;
-  border-radius:24px;
-  padding:26px 22px 34px;
-  border:4px solid #ffd966;
-  box-shadow:
-    0 0 20px rgba(255,215,0,.7),
-    inset 0 0 10px rgba(255,255,255,.25);
-  position:relative;
-  animation:fadeIn 1.5s ease;
-}
-
-/* Hoa văn viền trong */
-.envelope:before{
-  content:"";
-  position:absolute;
-  inset:8px;
-  border:2px dashed rgba(255,230,160,.9);
-  border-radius:18px;
-  pointer-events:none;
-}
-
-/* Nút tròn giữa bao */
-.seal{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#fff4b0,#ffb703,#d28b00);
-  margin:0 auto 12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  box-shadow:0 0 12px rgba(255,215,0,.9);
-}
-
-/* Tiêu đề */
-.title{
   text-align:center;
-  font-size:26px;
-  font-weight:700;
-  color:#fff2cc;
-  text-shadow:0 0 6px rgba(255,230,150,.9);
-  margin-bottom:12px;
 }
 
-/* Nội dung */
-.content{
-  background:rgba(255,255,255,.92);
-  border-radius:16px;
-  padding:16px;
-  color:#c10038;
-  font-size:15.5px;
-  line-height:1.65;
-  white-space:pre-line;
-  box-shadow:inset 0 0 6px rgba(255,0,60,.2);
-}
-
-/* Câu chúc nổi */
-.highlight{
-  display:block;
-  margin-top:10px;
-  text-align:center;
-  color:#ff0055;
-  font-weight:700;
-  font-style:italic;
-  font-size:17px;
-}
-
-/* Footer */
-.footer{
-  text-align:center;
-  margin-top:12px;
-  color:#fff0b3;
-  font-size:13px;
-}
-
-/* Nút nhạc */
-.music-btn{
+/* Màn hình mở lì xì */
+#openBox{
   position:fixed;
-  bottom:14px;
-  right:14px;
-  background:#ff3b3b;
-  color:white;
-  border:none;
-  border-radius:20px;
-  padding:8px 14px;
-  font-size:13px;
-  box-shadow:0 4px 10px rgba(0,0,0,.3);
+  inset:0;
+  background:linear-gradient(135deg,#ff1e1e,#ff8fa3);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
   cursor:pointer;
 }
 
-.music-btn:hover{background:#c70000}
+.box{
+  width:140px;
+  height:180px;
+  background:linear-gradient(#ff3b3b,#c70000);
+  border-radius:14px;
+  border:3px solid gold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:65px;
+  color:gold;
+  animation:shake 1.2s infinite;
+}
+
+@keyframes shake{
+  0%{transform:rotate(0deg)}
+  25%{transform:rotate(2deg)}
+  50%{transform:rotate(0deg)}
+  75%{transform:rotate(-2deg)}
+}
+
+#openBox h2{
+  color:white;
+  margin-top:20px;
+  text-shadow:0 0 10px gold;
+}
+
+/* Khung bao lì xì */
+.frame{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:92%;
+  max-width:520px;
+  background:linear-gradient(#ff0000,#c00000);
+  border-radius:26px;
+  padding:14px;
+  border:4px solid gold;
+  box-shadow:0 0 40px rgba(255,80,120,.9);
+  opacity:0;
+  animation:fadeIn 1.8s forwards;
+}
 
 @keyframes fadeIn{
-  from{opacity:0;transform:scale(.9)}
-  to{opacity:1;transform:scale(1)}
+  to{opacity:1}
 }
 
-/* Lấp lánh */
-.spark{
+.content{
+  background:#fff0f3;
+  border-radius:18px;
+  padding:22px;
+  border:2px dashed #ffb6c1;
+}
+
+h1{
+  font-family:'Pacifico',cursive;
+  color:gold;
+  text-shadow:0 0 12px red;
+}
+
+.text{
+  font-size:1.05em;
+  line-height:1.6;
+  color:#c1003a;
+}
+
+.quote{
+  margin:16px 0;
+  font-weight:600;
+  color:#ff0050;
+  font-size:1.15em;
+}
+
+/* Hiệu ứng rơi */
+.fall{
   position:fixed;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:gold;
-  box-shadow:0 0 10px gold;
-  animation:twinkle 1.5s linear infinite;
-  opacity:.7;
+  top:-20px;
+  animation:fall linear infinite;
+  pointer-events:none;
 }
 
-@keyframes twinkle{
-  0%{transform:scale(0);opacity:1}
-  100%{transform:scale(2.5);opacity:0}
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* nút nhạc */
+.musicBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#ff3b3b;
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:54px;
+  height:54px;
+  font-size:24px;
+  box-shadow:0 0 15px rgba(255,0,80,.9);
 }
 </style>
 </head>
 
 <body>
 
-<div class="envelope">
-  <div class="seal">🧧</div>
-  <div class="title">Happy New Year 2026</div>
-
-  <div class="content">
-Happy new years ! 
-Một năm cũ đã qua, một năm mới lại đến. Anh chúc cho gia đình em luôn bình an, luôn luôn khoẻ mạnh và phát lộc, phát tài.
-Chúc riêng em luôn vui vẻ, hạnh phúc bên gia đình và bạn bè.
-Chúc em luôn khoẻ, trẻ, xinh, đẹp và đạt được kết quả tốt trong năm học sắp tới.
-Chúc những điều tốt lành sẽ đến với em.
-
-<span class="highlight">“ Chúc em tất cả, trừ vất vả “</span>
-
-Và đây cũng là túi lộc đầu năm anh muốn gửi đến em^^
-Chúc em may mắn !
-  </div>
-
-  <div class="footer">🧧 2026 – An Khang • Thịnh Vượng • Bình An 🧧</div>
+<!-- Mở bao lì xì -->
+<div id="openBox">
+  <div class="box">🧧</div>
+  <h2>Chạm để mở lì xì 2026</h2>
 </div>
 
-<button class="music-btn" onclick="toggleMusic()">🎵 Nhạc</button>
-
-<audio id="bgm" loop autoplay>
+<!-- Nhạc -->
+<audio id="music" loop preload="auto">
   <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_5d04a72d96.mp3" type="audio/mpeg">
 </audio>
 
+<!-- Khung nội dung -->
+<div class="frame" id="frame">
+  <div class="content">
+    <h1>Happy New Year 2026</h1>
+    <div class="text">
+      Happy new years !<br><br>
+      Một năm cũ đã qua, một năm mới lại đến. Anh chúc cho gia đình em luôn bình an, luôn luôn khoẻ mạnh và phát lộc, phát tài.<br><br>
+      Chúc riêng em luôn vui vẻ, hạnh phúc bên gia đình và bạn bè.<br><br>
+      Chúc em luôn khoẻ, trẻ, xinh, đẹp và đạt được kết quả tốt trong năm học sắp tới.<br><br>
+      Chúc những điều tốt lành sẽ đến với em.
+      <div class="quote">“ Chúc em tất cả, trừ vất vả ”</div>
+      Và đây cũng là túi lộc đầu năm anh muốn gửi đến em^^<br>
+      Chúc em may mắn !
+    </div>
+  </div>
+</div>
+
+<button class="musicBtn" onclick="toggleMusic()">🎵</button>
+
 <script>
-const music = document.getElementById("bgm");
+const music = document.getElementById("music");
+const openBox = document.getElementById("openBox");
+
+openBox.addEventListener("click", async ()=>{
+  openBox.style.display="none";
+  try{ await music.play(); }catch(e){}
+  startRain();
+});
 
 function toggleMusic(){
   if(music.paused) music.play();
   else music.pause();
 }
 
-// auto play on first touch
-document.body.addEventListener("click",()=>{
-  if(music.paused) music.play();
-},{once:true});
-
-function spark(){
-  const s=document.createElement("div");
-  s.className="spark";
-  s.style.left=Math.random()*innerWidth+"px";
-  s.style.top=Math.random()*innerHeight+"px";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),1500);
+function startRain(){
+  setInterval(()=>{
+    const el=document.createElement("div");
+    el.className="fall";
+    el.innerHTML=["🧧","💖","🌸","✨","💰"][Math.floor(Math.random()*5)];
+    el.style.left=Math.random()*100+"vw";
+    el.style.fontSize=16+Math.random()*24+"px";
+    el.style.animationDuration=5+Math.random()*6+"s";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),11000);
+  },200);
 }
-setInterval(spark,350);
 </script>
 
 </body>
