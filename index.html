@@ -205,13 +205,13 @@ function startRain(){
   setInterval(()=>{
     const el=document.createElement("div");
     el.className="fall";
-    el.innerHTML=["🧧","💰","✨","🌸","❤️"][Math.floor(Math.random()*5)];
+    el.innerHTML=["🧧","💖","🌸","✨","💰"][Math.floor(Math.random()*5)];
     el.style.left=Math.random()*100+"vw";
-    el.style.fontSize=18+Math.random()*22+"px";
-    el.style.animationDuration=4+Math.random()*6+"s";
+    el.style.fontSize=18+Math.random()*16+"px";
+    el.style.animationDuration=7+Math.random()*5+"s";
     document.body.appendChild(el);
-    setTimeout(()=>el.remove(),10000);
-  },180);
+    setTimeout(()=>el.remove(),13000);
+  },450);   // ← Từ 200ms → 450ms (giảm gần 60%)
 }
 
 /* Pháo hoa */
