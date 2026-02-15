@@ -243,23 +243,36 @@ function openLucky(){
 }
 
 /* Music control */
-const music=document.getElementById('music');
-const musicBtn=document.getElementById('musicBtn');
-let isPlaying=false;
+const music = document.getElementById('music');
+const musicBtn = document.getElementById('musicBtn');
 
-musicBtn.onclick=()=>{
-  if(isPlaying){
-    music.pause();
-    musicBtn.innerHTML="🔇";
-    musicBtn.classList.remove("spin");
-  }else{
-    music.play().catch(()=>{});
-    musicBtn.innerHTML="🎵";
-    musicBtn.classList.add("spin");
+let musicStarted = false;
+
+// Tự bật nhạc khi user chạm lần đầu
+function autoPlayMusic(){
+  if(!musicStarted){
+    music.play().then(()=>{
+      musicStarted = true;
+      musicBtn.innerHTML = "🎵";
+    }).catch(()=>{});
   }
-  isPlaying=!isPlaying;
 }
 
+// iOS + Android autoplay fix
+document.addEventListener('touchstart', autoPlayMusic, { once:true });
+document.addEventListener('click', autoPlayMusic, { once:true });
+
+// Nút bật / tắt nhạc
+musicBtn.onclick = (e)=>{
+  e.stopPropagation();
+  if(music.paused){
+    music.play();
+    musicBtn.innerHTML = "🎵";
+  }else{
+    music.pause();
+    musicBtn.innerHTML = "🔇";
+  }
+};
 /* Falling effect */
 function startRain(){
   if(window.raining) return;
