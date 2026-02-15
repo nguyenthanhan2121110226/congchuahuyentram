@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chúc Mừng Năm Mới 2026 - Công Chúa Huyền Trâm</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:radial-gradient(circle at bottom,#020111,#000);
+    font-family:'Pacifico',cursive;
+    color:white;
+    text-align:center;
+}
+canvas{
+    position:fixed;
+    inset:0;
+}
+.container{
+    position:absolute;
+    width:100%;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:10;
+    animation:fadeIn 3s ease;
+}
+h1{
+    font-size:3em;
+    color:#ffd700;
+    text-shadow:0 0 20px gold,0 0 50px red;
+    animation:glow 2s infinite alternate;
+}
+p{
+    font-size:1.4em;
+    margin:8px;
+    color:#ffb6c1;
+    text-shadow:0 0 10px hotpink;
+}
+@keyframes glow{
+    from{ text-shadow:0 0 10px gold;}
+    to{ text-shadow:0 0 30px gold,0 0 60px red;}
+}
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+.heart{
+    position:absolute;
+    color:pink;
+    font-size:20px;
+    animation:fall 8s linear infinite;
+}
+@keyframes fall{
+    0%{ transform:translateY(-10vh); opacity:1;}
+    100%{ transform:translateY(110vh); opacity:0;}
+}
+</style>
+</head>
+<body>
 
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+    <h1>🎆 Chúc Mừng Năm Mới 2026 🎆</h1>
+    <p>Gửi đến <b>Công Chúa Huyền Trâm</b> 💖</p>
+    <p>Mong em một năm mới thật rực rỡ,</p>
+    <p>Luôn xinh đẹp, hạnh phúc và bình an ✨</p>
+    <p>Mọi ước mơ đều thành hiện thực 🌸</p>
+    <p>Và luôn được yêu thương thật nhiều ❤️</p>
+</div>
+
+<script>
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+class Firework{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.targetY=Math.random()*canvas.height/2;
+    this.speed=Math.random()*3+4;
+    this.exploded=false;
+    this.particles=[];
+  }
+  update(){
+    if(!this.exploded){
+      this.y-=this.speed;
+      if(this.y<=this.targetY){
+        this.exploded=true;
+        for(let i=0;i<60;i++) this.particles.push(new Particle(this.x,this.y));
+      }
+    } else this.particles.forEach(p=>p.update());
+  }
+  draw(){
+    if(!this.exploded){
+      ctx.fillStyle="gold";
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,2,0,Math.PI*2);
+      ctx.fill();
+    } else this.particles.forEach(p=>p.draw());
+  }
+}
+
+class Particle{
+  constructor(x,y){
+    this.x=x; this.y=y;
+    this.vx=(Math.random()-0.5)*8;
+    this.vy=(Math.random()-0.5)*8;
+    this.alpha=1;
+    this.color=`hsl(${Math.random()*360},100%,60%)`;
+  }
+  update(){
+    this.x+=this.vx;
+    this.y+=this.vy;
+    this.alpha-=0.02;
+  }
+  draw(){
+    ctx.globalAlpha=this.alpha;
+    ctx.fillStyle=this.color;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,3,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
+
+let fireworks=[];
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.05) fireworks.push(new Firework());
+  fireworks.forEach((fw,i)=>{
+    fw.update();
+    fw.draw();
+    if(fw.exploded && fw.particles[0]?.alpha<=0) fireworks.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.innerHTML="❤️";
+  heart.className="heart";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=(Math.random()*3+5)+"s";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),8000);
+}
+setInterval(createHeart,300);
+</script>
+
+</body>
+</html>
