@@ -321,21 +321,19 @@ function closeModal(){
 /* MUSIC */
 const music=document.getElementById("music");
 const musicBtn=document.getElementById("musicBtn");
-let musicStarted=false;
+let started=false;
 
-function autoPlayMusic(){
-  if(!musicStarted){
-    music.play().then(()=>{
-      musicStarted=true;
-      musicBtn.classList.add("spinIcon");
-    }).catch(()=>{});
+function autoPlay(){
+  if(!started){
+    music.play();
+    started=true;
+    musicBtn.classList.add("spinIcon");
   }
 }
+document.addEventListener("click",autoPlay,{once:true});
+document.addEventListener("touchstart",autoPlay,{once:true});
 
-document.addEventListener("click",autoPlayMusic,{once:true});
-document.addEventListener("touchstart",autoPlayMusic,{once:true});
-
-musicBtn.onclick=(e)=>{
+musicBtn.onclick=e=>{
   e.stopPropagation();
   if(music.paused){
     music.play();
@@ -344,7 +342,7 @@ musicBtn.onclick=(e)=>{
     music.pause();
     musicBtn.classList.remove("spinIcon");
   }
-}
+};
 
 /* FALL */
 function startRain(){
