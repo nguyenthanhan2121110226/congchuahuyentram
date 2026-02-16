@@ -10,8 +10,8 @@
             --primary: #e60026;
             --secondary: #ff5fa2;
             --gold: #ffcc33;
-            --glass: rgba(255, 255, 255, 0.85);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,58 +25,49 @@
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
-            perspective: 1000px;
         }
 
-        /* Nền động mượt mà */
-        .bg-glow {
+        /* Nền hiệu ứng */
+        canvas#fireworks {
             position: fixed;
-            width: 150vw;
-            height: 150vh;
-            background: radial-gradient(circle, rgba(255,204,51,0.2) 0%, transparent 70%);
-            animation: moveGlow 15s infinite alternate ease-in-out;
-            z-index: -1;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        @keyframes moveGlow {
-            from { transform: translate(-20%, -20%); }
-            to { transform: translate(10%, 10%); }
-        }
-
-        /* Card Chính - Glassmorphism */
+        /* Container chính */
         .container {
-            width: 90%;
-            max-width: 450px;
+            width: 92%;
+            max-width: 420px;
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
             box-shadow: var(--shadow);
-            padding: 30px 20px;
+            padding: 25px 15px;
             text-align: center;
             position: relative;
             z-index: 10;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .container:hover { transform: translateY(-5px) scale(1.01); }
 
         h1 {
             font-family: 'Pacifico', cursive;
             color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-size: 1.6rem;
+            margin: 0 0 20px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Navigation Buttons */
+        /* Navigation Tab */
         .nav-tabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
-            background: rgba(0,0,0,0.05);
-            padding: 5px;
+            background: rgba(0,0,0,0.06);
+            padding: 6px;
             border-radius: 20px;
         }
 
@@ -87,144 +78,177 @@
             border-radius: 15px;
             background: transparent;
             font-weight: 700;
-            color: #666;
+            color: #777;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s ease;
         }
 
         .nav-btn.active {
             background: white;
             color: var(--primary);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Content Areas */
+        /* Nội dung chuyển tab */
         .tab-content {
             position: relative;
-            min-height: 250px;
-            overflow: hidden;
+            min-height: 320px;
         }
 
         .panel {
             position: absolute;
             width: 100%;
             opacity: 0;
-            transform: translateX(50px);
+            transform: scale(0.9) translateY(20px);
             pointer-events: none;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .panel.active {
             opacity: 1;
-            transform: translateX(0);
+            transform: scale(1) translateY(0);
             pointer-events: auto;
             position: relative;
         }
 
         .text-box {
             background: white;
-            padding: 20px;
+            padding: 18px;
             border-radius: 20px;
             line-height: 1.6;
             color: #444;
             font-size: 0.95rem;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
             text-align: left;
         }
 
-        /* Lì xì & Vòng quay */
-        .wheel-container {
-            margin: 20px 0;
+        /* VÒNG QUAY CHI Ô */
+        .wheel-outer {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .wheel-indicator {
+            width: 0; height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--gold);
+            position: absolute;
+            top: -10px;
+            z-index: 20;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .lucky-wheel {
-            width: 160px;
-            height: 160px;
+            width: 240px;
+            height: 240px;
             border-radius: 50%;
             border: 8px solid var(--gold);
-            background: conic-gradient(from 0deg, #e60026, #ffcc33, #ff5fa2, #e60026);
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Chia ô màu bằng conic-gradient */
+        .wheel-bg {
+            position: absolute;
+            inset: 0;
+            background: conic-gradient(
+                #e60026 0deg 60deg, 
+                #ff5fa2 60deg 120deg, 
+                #e60026 120deg 180deg, 
+                #ff5fa2 180deg 240deg, 
+                #e60026 240deg 300deg, 
+                #ff5fa2 300deg 360deg
+            );
+        }
+
+        .wheel-text-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wheel-text-container span {
+            position: absolute;
+            width: 50%;
+            height: 40px;
+            top: 50%;
+            left: 50%;
+            transform-origin: left center;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            padding-left: 45px;
+            display: flex;
+            align-items: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; height: 50px;
+            background: white;
+            border-radius: 50%;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: transform 3s cubic-bezier(0.15, 0, 0.15, 1);
+            font-size: 24px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            border: 3px solid var(--gold);
         }
 
         .btn-main {
             width: 100%;
-            margin-top: 15px;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 15px;
+            border-radius: 18px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(230, 0, 38, 0.3);
+            box-shadow: 0 6px 20px rgba(230, 0, 38, 0.3);
+            margin-top: 15px;
             transition: 0.3s;
         }
 
-        .btn-main:active { transform: scale(0.95); }
+        .btn-main:active { transform: scale(0.96); }
 
-        /* Modal xịn hơn */
+        /* Modal */
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             display: none;
             place-items: center;
             z-index: 1000;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-card {
             background: white;
-            padding: 25px;
+            padding: 30px 20px;
             border-radius: 25px;
             width: 85%;
-            max-width: 350px;
+            max-width: 340px;
             text-align: center;
-            animation: modalIn 0.4s bounce;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes modalIn {
-            from { transform: scale(0.8); opacity: 0; }
-        }
+        @keyframes modalPop { from { transform: scale(0.5); opacity: 0; } }
 
-        .modal img { width: 100%; border-radius: 15px; margin: 15px 0; border: 3px solid var(--gold); }
+        .modal img { width: 100%; border-radius: 15px; border: 4px solid var(--gold); margin: 15px 0; }
 
-        /* Music & Decoration */
-        .music-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            background: var(--glass);
-            border: none;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: var(--shadow);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
-        }
-
-        .spinning { animation: spin 3s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        canvas#fireworks {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
+        /* Hiệu ứng rơi */
         .fall-item {
             position: fixed;
             top: -50px;
@@ -232,13 +256,28 @@
             z-index: 5;
             animation: fall linear forwards;
         }
-
         @keyframes fall { to { transform: translateY(110vh) rotate(540deg); } }
+
+        /* Music Button */
+        .music-btn {
+            position: fixed;
+            bottom: 25px; right: 25px;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 100;
+            font-size: 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .spinning { animation: spin 3s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
 <canvas id="fireworks"></canvas>
 
 <div class="container">
@@ -253,8 +292,8 @@
         <div id="wish" class="panel active">
             <div class="text-box">
                 <strong style="color: var(--primary); font-size: 1.1rem;">Happy New Year 💖</strong><br><br>
-                Năm cũ qua đi, năm mới Bính Ngọ lại đến. Anh chúc gia đình em luôn bình an, mạnh khỏe và vạn sự như ý.<br><br>
-                Chúc riêng em luôn xinh đẹp, rạng rỡ và đạt kết quả cao nhất trong kỳ thi sắp tới. Mong mọi điều ngọt ngào nhất sẽ đến với em.<br><br>
+                Năm mới Bính Ngọ 2026, anh chúc em và gia đình luôn dồi dào sức khỏe, vạn sự như ý, lộc vào như nước.<br><br>
+                Chúc riêng em luôn xinh đẹp, trẻ trung và gặt hái được nhiều thành công trong học tập cũng như cuộc sống.<br><br>
                 <i>“Chúc em tất cả, trừ vất vả”</i> ✨
             </div>
             <button class="btn-main" onclick="createHearts()">Gửi Ngàn Tim ❤️</button>
@@ -262,26 +301,39 @@
 
         <div id="lucky" class="panel">
             <div class="text-box" style="text-align: center;">
-                🍀 <b>Vòng Quay May Mắn</b> 🍀<br>
-                Thử vận may đầu năm để nhận lộc từ anh nhé!
-                <div class="wheel-container">
-                    <div class="lucky-wheel" id="wheel">🧧</div>
+                🍀 <b>Vòng Quay Lộc Phát</b> 🍀<br>
+                Ấn quay để nhận lì xì may mắn từ Anh An nhé!
+                
+                <div class="wheel-outer">
+                    <div class="wheel-indicator"></div>
+                    <div class="lucky-wheel" id="wheel">
+                        <div class="wheel-bg"></div>
+                        <div class="wheel-text-container">
+                            <span style="transform: rotate(30deg) translateY(-50%);">ANH AN</span>
+                            <span style="transform: rotate(90deg) translateY(-50%);">ANH AN</span>
+                            <span style="transform: rotate(150deg) translateY(-50%);">ANH AN</span>
+                            <span style="transform: rotate(210deg) translateY(-50%);">ANH AN</span>
+                            <span style="transform: rotate(270deg) translateY(-50%);">ANH AN</span>
+                            <span style="transform: rotate(330deg) translateY(-50%);">ANH AN</span>
+                        </div>
+                        <div class="wheel-center">🧧</div>
+                    </div>
                 </div>
             </div>
-            <button class="btn-main" onclick="startSpin()">🎉 Quay Ngay 🎉</button>
+            <button class="btn-main" onclick="startSpin()">🎉 Quay Nhận Lộc 🎉</button>
         </div>
     </div>
 </div>
 
 <div class="modal" id="modal">
     <div class="modal-card">
-        <h2 style="color: var(--primary); margin: 0;">🎉 Chúc Mừng! 🎉</h2>
-        <p>Bạn đã trúng một bao lì xì may mắn!</p>
+        <h2 style="color: var(--primary); margin: 0;">🎉 CHÚC MỪNG! 🎉</h2>
+        <p>Lộc đầu năm từ Anh An dành cho em đây!</p>
         <img src="./IMG_2758.jpeg" alt="Lì xì">
         <a href="https://lixi.momo.vn/lixi/QYwxlG1Omremw2l" target="_blank" style="text-decoration: none;">
-            <button class="btn-main">💰 Mở Bao Lì Xì 💰</button>
+            <button class="btn-main">💰 NHẬN LÌ XÌ NGAY 💰</button>
         </a>
-        <button onclick="closeModal()" style="background: none; border: none; margin-top: 10px; color: #888; cursor: pointer;">Đóng</button>
+        <button onclick="closeModal()" style="margin-top: 15px; background: none; border: none; color: #999; cursor: pointer;">Đóng</button>
     </div>
 </div>
 
@@ -291,7 +343,7 @@
 </audio>
 
 <script>
-    // Xử lý chuyển Tab mượt mà
+    // CHUYỂN TAB MƯỢT MÀ
     function switchTab(tabId, btn) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -299,18 +351,18 @@
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
         
-        if(tabId === 'lucky') {
-            // Hiệu ứng troll khi lần đầu mở lì xì có thể thêm ở đây
-        }
+        if(tabId === 'lucky') boom();
     }
 
-    // Vòng quay & Troll
+    // VÒNG QUAY & LOGIC QUAY
     let isSpinning = false;
     function startSpin() {
         if (isSpinning) return;
         isSpinning = true;
+        
         const wheel = document.getElementById('wheel');
-        const randomDegree = Math.floor(Math.random() * 360) + 1800; // Quay ít nhất 5 vòng
+        // Quay ngẫu nhiên ít nhất 5 vòng (1800deg) đến 10 vòng
+        const randomDegree = Math.floor(Math.random() * 360) + 1800; 
         
         wheel.style.transform = `rotate(${randomDegree}deg)`;
         
@@ -318,38 +370,37 @@
             document.getElementById('modal').style.display = 'grid';
             boom();
             isSpinning = false;
-        }, 3000);
+        }, 4100);
     }
 
     function closeModal() {
         document.getElementById('modal').style.display = 'none';
     }
 
-    // Hiệu ứng rơi (Tối ưu performance)
-    function createFallItem() {
-        const items = ['🧧','🌸','✨','🧧','🐎','💰'];
+    // HIỆU ỨNG RƠI 🧧🌸
+    function createFallItem(emoji = null) {
+        const items = ['🧧','🌸','💖','✨','🧨','🐎'];
         const item = document.createElement('div');
         item.className = 'fall-item';
-        item.innerText = items[Math.floor(Math.random() * items.length)];
+        item.innerText = emoji || items[Math.floor(Math.random() * items.length)];
         item.style.left = Math.random() * 100 + 'vw';
-        item.style.fontSize = Math.random() * 20 + 15 + 'px';
+        item.style.fontSize = Math.random() * 20 + 20 + 'px';
         const duration = Math.random() * 3 + 4;
         item.style.animationDuration = duration + 's';
         
         document.body.appendChild(item);
         setTimeout(() => item.remove(), duration * 1000);
     }
-    setInterval(createFallItem, 500);
+    setInterval(createFallItem, 600);
 
-    // Hiệu ứng tim khi ấn nút
     function createHearts() {
         for(let i=0; i<15; i++) {
-            setTimeout(createFallItem, i * 100);
+            setTimeout(() => createFallItem('❤️'), i * 100);
         }
         boom();
     }
 
-    // Pháo hoa Canvas (Mượt hơn)
+    // PHÁO HOA CANVAS
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
     let particles = [];
@@ -362,13 +413,13 @@
     resize();
 
     function boom() {
-        for(let i=0; i<40; i++) {
+        for(let i=0; i<35; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height * 0.5,
+                y: Math.random() * canvas.height * 0.4,
                 r: Math.random() * 2 + 1,
-                dx: (Math.random() - 0.5) * 8,
-                dy: (Math.random() - 0.5) * 8,
+                dx: (Math.random() - 0.5) * 10,
+                dy: (Math.random() - 0.5) * 10,
                 color: `hsl(${Math.random() * 360}, 100%, 60%)`,
                 life: 1
             });
@@ -376,13 +427,11 @@
     }
 
     function animate() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
         particles.forEach((p, i) => {
             p.x += p.dx;
             p.y += p.dy;
-            p.dy += 0.1; // trọng lực
+            p.dy += 0.12; 
             p.life -= 0.01;
             
             ctx.beginPath();
@@ -397,7 +446,7 @@
     }
     animate();
 
-    // Nhạc
+    // NHẠC
     const music = document.getElementById("music");
     const musicBtn = document.getElementById("musicBtn");
     
@@ -410,13 +459,7 @@
             musicBtn.classList.remove('spinning');
         }
     }
-    
-    // Tự động chạy nhạc sau tương tác đầu tiên
-    document.addEventListener('click', () => {
-        if(music.paused && !musicBtn.classList.contains('manual-off')) {
-            // music.play(); // Bỏ comment nếu muốn tự chạy
-        }
-    }, {once: true});
 </script>
+
 </body>
 </html>
