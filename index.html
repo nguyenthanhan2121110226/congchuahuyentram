@@ -313,59 +313,70 @@ canvas{
 </audio>
 
 <script>
-const wish = document.getElementById("wish");
-const lucky = document.getElementById("lucky");
-const spinBox = document.getElementById("spinBox");
-const modal = document.getElementById("modal");
+const wish=document.getElementById("wish");
+const lucky=document.getElementById("lucky");
+const spinBox=document.getElementById("spinBox");
+const modal=document.getElementById("modal");
 const flipWrap=document.getElementById("flipWrap");
 
 let trollCount=0,trolling=false;
 
-const trollText=[
-"Bạn chắc chắn muốn nhận lì xì không 😏","Khoan đã... suy nghĩ kỹ chưa 🤔","Ấn thêm phát nữa cho chắc 😝",
-"Ủa vẫn chưa bỏ cuộc à 😆","✨ Thêm tí nữa ✨","Hệ thống đang xin vía 🧿","Đang gọi lộc về 📞",
-"Server rung rung rồi 🖥️","Ok ok... lần cuối 😈"
-];
-
+/* ===== CORE ===== */
 function ultraOpen(){
   flipWrap.classList.toggle("flipped");
-  confettiBurst();
 }
 
 function openWish(){
   ultraOpen();
   wish.style.display="block";
   lucky.style.display="none";
-  startRain();boom();
+  startRain();
+  boom();
 }
 
 function openLucky(){
   if(trolling) return;
-  trolling=true;trollCount=0;showTroll();
+  trolling=true;
+  trollCount=0;
+  showTroll();
 }
+
+/* ===== TROLL ===== */
+const trollText=[
+"Bạn chắc chắn muốn nhận lì xì không 😏",
+"Khoan đã... suy nghĩ kỹ chưa 🤔",
+"Ấn thêm phát nữa cho chắc 😝",
+"Ủa vẫn chưa bỏ cuộc à 😆",
+"✨ Thêm tí nữa ✨",
+"Ok ok... lần cuối 😈"
+];
 
 function showTroll(){
   modal.style.display="flex";
-  modal.innerHTML=`<div class="modalBox"><h3>${trollText[trollCount]}</h3>
-  <button onclick="nextStep()">YES</button><button onclick="nextStep()">NO</button></div>`;
+  modal.innerHTML=`<div class="modalBox">
+  <h3>${trollText[trollCount]}</h3>
+  <button onclick="nextStep()">OK</button></div>`;
 }
 
 function nextStep(){
   trollCount++;
-  if(trollCount<9) showTroll();
+  if(trollCount<trollText.length) showTroll();
   else{
-    trolling=false;modal.style.display="none";
-    lucky.style.display="block";wish.style.display="none";
-    startRain();boom();
+    trolling=false;
+    modal.style.display="none";
+    lucky.style.display="block";
+    wish.style.display="none";
+    startRain();
+    boom();
   }
 }
 
-/* SPIN */
+/* ===== SPIN ===== */
 function spin(){
   spinBox.classList.remove("spinAnim");
   void spinBox.offsetWidth;
   spinBox.classList.add("spinAnim");
-  setTimeout(()=>showQR(),3500);
+  setTimeout(showQR,3000);
 }
 
 function showQR(){
@@ -381,90 +392,105 @@ function showQR(){
   </div>`;
 }
 
-/* MUSIC */
+/* ===== MUSIC ===== */
 const music=document.getElementById("music");
 const musicBtn=document.getElementById("musicBtn");
 let started=false;
+
 function autoPlay(){
-  if(!started){music.play();started=true;musicBtn.classList.add("spinIcon");}
+  if(!started){
+    music.play();
+    started=true;
+    musicBtn.classList.add("spinIcon");
+  }
 }
 document.addEventListener("click",autoPlay,{once:true});
+
 musicBtn.onclick=e=>{
   e.stopPropagation();
   music.paused?music.play():music.pause();
   musicBtn.classList.toggle("spinIcon");
 };
 
-/* FALL + CONFETTI */
+/* ===== FALL (OPTIMIZED) ===== */
 function startRain(){
   if(window.raining) return;
   window.raining=true;
   setInterval(()=>{
     const el=document.createElement("div");
     el.className="fall";
-    el.innerHTML=["🧧","🌸","💖","✨","🧨","💰","🐎"][Math.floor(Math.random()*7)];
+    el.innerHTML=["🧧","🌸","✨","💖","💰"][Math.floor(Math.random()*5)];
     el.style.left=Math.random()*100+"vw";
-    el.style.fontSize=18+Math.random()*22+"px";
-    el.style.animationDuration=8+Math.random()*6+"s";
+    el.style.fontSize=16+Math.random()*18+"px";
+    el.style.animationDuration=10+Math.random()*6+"s";
     document.body.appendChild(el);
     setTimeout(()=>el.remove(),14000);
-  },450);
+  },900); // từ 450 → 900 (giảm 50% tải)
 }
 
+/* ===== CONFETTI (LIGHT) ===== */
 function confettiBurst(x=innerWidth/2,y=innerHeight/3){
-  for(let i=0;i<40;i++){
+  for(let i=0;i<16;i++){ // từ 40 → 16
     const el=document.createElement("div");
     el.className="confetti";
-    el.innerHTML=["🧧","🌸","✨","💖","🎆","💰"][Math.floor(Math.random()*6)];
-    el.style.left=x+rand(-100,100)+"px";
-    el.style.fontSize=14+Math.random()*24+"px";
+    el.innerHTML=["🧧","✨","💖","🎆"][Math.floor(Math.random()*4)];
+    el.style.left=x+rand(-70,70)+"px";
+    el.style.fontSize=14+Math.random()*18+"px";
     el.style.animationDuration=4+Math.random()*3+"s";
     document.body.appendChild(el);
-    setTimeout(()=>el.remove(),7000);
+    setTimeout(()=>el.remove(),6000);
   }
 }
 
-function rand(min,max){return Math.random()*(max-min)+min}
-
-/* FIREWORK */
+/* ===== FIREWORK CANVAS (LIGHT) ===== */
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
-function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
+
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
 resize();onresize=resize;
+
 let particles=[];
 
 function boom(){
-  for(let i=0;i<28;i++){
+  for(let i=0;i<14;i++){ // từ 28 → 14
     particles.push({
       x:Math.random()*canvas.width,
       y:Math.random()*canvas.height/2,
-      r:Math.random()*3+2,
-      dx:(Math.random()-0.5)*6,
-      dy:(Math.random()-0.5)*6,
-      life:120
+      r:Math.random()*2+2,
+      dx:(Math.random()-0.5)*5,
+      dy:(Math.random()-0.5)*5,
+      life:80
     });
   }
 }
 
-function draw(){
+let lastTime=0;
+function draw(t){
+  if(t-lastTime<33){requestAnimationFrame(draw);return;}
+  lastTime=t;
+
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach((p,i)=>{
     ctx.beginPath();
     ctx.fillStyle=`hsl(${Math.random()*360},100%,70%)`;
     ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fill();
-    p.x+=p.dx;p.y+=p.dy;p.life--;
+    p.x+=p.dx;
+    p.y+=p.dy;
+    p.life--;
     if(p.life<=0) particles.splice(i,1);
   });
   requestAnimationFrame(draw);
 }
 draw();
 
-/* Ripple */
+/* ===== RIPPLE LIGHT ===== */
 document.addEventListener("click",e=>{
   ripple(e.clientX,e.clientY);
   confettiBurst(e.clientX,e.clientY);
-  boom();
 });
 
 function ripple(x,y){
@@ -475,7 +501,10 @@ function ripple(x,y){
   document.body.appendChild(r);
   setTimeout(()=>r.remove(),600);
 }
-</script>
 
+function rand(min,max){
+  return Math.random()*(max-min)+min;
+}
+</script>
 </body>
 </html>
