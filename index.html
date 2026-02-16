@@ -210,6 +210,28 @@ canvas{
   inset:0;
   pointer-events:none;
 }
+ .musicBtn{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--red),var(--gold));
+  border:none;
+  color:white;
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 22px rgba(255,200,80,.95);
+  cursor:pointer;
+  z-index:9999;
+}
+
+.spinIcon{
+  animation:spin 3s linear infinite;
+} 
 </style>
 </head>
 
@@ -352,7 +374,40 @@ function draw(){
 }
 
 draw();
-</script>
+  /* ===== MUSIC ===== */
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+let musicStarted = false;
 
+// Auto play fix iOS
+function autoPlayMusic(){
+  if(!musicStarted){
+    music.play().then(()=>{
+      musicStarted = true;
+      musicBtn.classList.add("spinIcon");
+    }).catch(()=>{});
+  }
+}
+
+document.addEventListener("click", autoPlayMusic, { once:true });
+document.addEventListener("touchstart", autoPlayMusic, { once:true });
+
+// Toggle music
+musicBtn.onclick = (e)=>{
+  e.stopPropagation();
+  if(music.paused){
+    music.play();
+    musicBtn.classList.add("spinIcon");
+  }else{
+    music.pause();
+    musicBtn.classList.remove("spinIcon");
+  }
+};
+</script>
+<button class="musicBtn" id="musicBtn">🎵</button>
+
+<audio id="music" loop>
+  <source src="./music/tet.mp3.mp3" type="audio/mpeg">
+</audio>
 </body>
 </html>
