@@ -28,7 +28,6 @@ body{
   font-family:'Quicksand',sans-serif;
 }
 
-/* BACKGROUND */
 .bgLight{
   position:fixed;
   inset:0;
@@ -49,7 +48,6 @@ body{
   50%{transform:translateY(-25px)}
 }
 
-/* CARD */
 .envelope{
   width:92%;
   max-width:520px;
@@ -60,7 +58,6 @@ body{
   border:4px solid var(--gold);
   box-shadow:0 0 60px rgba(255,210,120,.9);
   animation:float 5s ease-in-out infinite;
-  perspective:1200px;
 }
 
 @keyframes float{
@@ -68,23 +65,12 @@ body{
   50%{transform:translateY(-10px)}
 }
 
-.flipWrap{
-  transition:transform .9s ease;
-  transform-style:preserve-3d;
-}
-
-.flipWrap.flipped{
-  transform:rotateY(180deg);
-}
-
 h1{
   font-family:'Pacifico',cursive;
   font-size:30px;
   color:var(--red);
-  text-shadow:0 0 14px rgba(255,200,100,.9);
 }
 
-/* BUTTON */
 button{
   width:100%;
   padding:15px;
@@ -100,18 +86,10 @@ button{
 }
 
 button:hover{transform:scale(1.05)}
-button:active{transform:scale(.95)}
 
-/* CONTENT */
 .content{
   display:none;
   margin-top:15px;
-  animation:fade .5s ease;
-}
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
 }
 
 .text{
@@ -120,11 +98,8 @@ button:active{transform:scale(.95)}
   padding:16px;
   line-height:1.7;
   color:#8b002f;
-  max-height:45vh;
-  overflow-y:auto;
 }
 
-/* SPIN */
 .spinBox{
   margin:20px auto;
   width:190px;
@@ -146,7 +121,6 @@ button:active{transform:scale(.95)}
   to{transform:rotate(2160deg)}
 }
 
-/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -167,13 +141,6 @@ button:active{transform:scale(.95)}
   border:4px solid var(--gold);
 }
 
-.modalBox img{
-  width:210px;
-  border-radius:16px;
-  border:4px solid var(--gold);
-}
-
-/* MUSIC */
 .musicBtn{
   position:fixed;
   bottom:18px;
@@ -185,10 +152,6 @@ button:active{transform:scale(.95)}
   border:none;
   color:white;
   font-size:24px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
 }
 
 .spinIcon{ animation:spin 4s linear infinite }
@@ -208,7 +171,6 @@ canvas{
 <canvas id="fireworks"></canvas>
 
 <div class="envelope">
-  <div class="flipWrap" id="flipWrap">
 
   <h1>🧧 Chúc mừng năm Bính Ngọ 2026 🧧</h1>
 
@@ -221,21 +183,18 @@ canvas{
       Một năm cũ đã qua, một năm mới lại đến. Anh chúc cho gia đình em luôn bình an, khoẻ mạnh và phát lộc phát tài.<br><br>
       Chúc riêng em luôn vui vẻ, hạnh phúc bên gia đình và bạn bè.<br><br>
       Chúc em luôn khoẻ, trẻ, xinh, đẹp và đạt được kết quả tốt trong năm học sắp tới.<br><br>
-      Chúc những điều tốt lành sẽ đến với em.<br><br>
       “ Chúc em tất cả, trừ vất vả ” ✨
     </div>
   </div>
 
   <div id="lucky" class="content">
     <div class="text">
-      🍀 Chúc bạn may mắn 🍀<br>
-      Quay vòng quay để nhận lộc đầu năm 💖
+      🍀 Quay để nhận lộc đầu năm 🍀
       <div class="spinBox" id="spinBox">🧧</div>
       <button onclick="spin()">🎉 Quay nhận lộc 🎉</button>
     </div>
   </div>
 
-  </div>
 </div>
 
 <div class="modal" id="modal"></div>
@@ -246,23 +205,45 @@ canvas{
 </audio>
 
 <script>
-const wish=document.getElementById("wish");
-const lucky=document.getElementById("lucky");
-const spinBox=document.getElementById("spinBox");
-const modal=document.getElementById("modal");
-const flipWrap=document.getElementById("flipWrap");
+const wish = document.getElementById("wish");
+const lucky = document.getElementById("lucky");
+const spinBox = document.getElementById("spinBox");
+const modal = document.getElementById("modal");
+
+let hasReadWish = false;
+let trollCount = 0;
+
+const trollMessages = [
+  "😏 Đọc lời chút chưa mà ấn mở bao lì xì thế?",
+  "😑 Đọc cho xong đã rồi hãy mở nha!"
+];
 
 function openWish(){
-  flipWrap.classList.toggle("flipped");
-  wish.style.display="block";
-  lucky.style.display="none";
+  hasReadWish = true;
+  wish.style.display = "block";
+  lucky.style.display = "none";
   boom();
 }
 
 function openLucky(){
-  wish.style.display="none";
-  lucky.style.display="block";
+  if(!hasReadWish && trollCount < trollMessages.length){
+    showTroll(trollMessages[trollCount]);
+    trollCount++;
+    return;
+  }
+  wish.style.display = "none";
+  lucky.style.display = "block";
   boom();
+}
+
+function showTroll(text){
+  modal.style.display = "flex";
+  modal.innerHTML = `
+    <div class="modalBox">
+      <h3>${text}</h3>
+      <button onclick="modal.style.display='none'">OK 😅</button>
+    </div>
+  `;
 }
 
 /* SPIN */
@@ -270,18 +251,15 @@ function spin(){
   spinBox.classList.remove("spinAnim");
   void spinBox.offsetWidth;
   spinBox.classList.add("spinAnim");
-  setTimeout(showQR,3000);
+  setTimeout(showMoney,3000);
 }
 
-function showQR(){
+function showMoney(){
   modal.style.display="flex";
   modal.innerHTML=`
   <div class="modalBox">
-    <h3>🎉 Nhận lì xì 🎉</h3>
-    <img src="./IMG_2758.jpeg">
-    <a href="https://lixi.momo.vn/lixi/QYwxlG1Omremw2l" target="_blank">
-      <button>💰 Nhận ngay 💰</button>
-    </a>
+    <h3>🎉 Lộc đầu năm 🎉</h3>
+    <h1 style="color:#e60026">${[20,50,68,88,100,200][Math.floor(Math.random()*6)]}K</h1>
     <button onclick="modal.style.display='none'">Đóng</button>
   </div>`;
 }
@@ -325,7 +303,7 @@ function boom(){
       r:Math.random()*2+1,
       dx:(Math.random()-0.5)*4,
       dy:(Math.random()-0.5)*4,
-      life:70
+      life:60
     });
   }
 }
