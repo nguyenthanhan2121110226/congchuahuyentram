@@ -222,8 +222,10 @@ let hasReadWish=false;
 let trollStep=0;
 
 const trollText=[
+   "😈 Tao biết ngay mà… cái đồ ham xiền!"
   "😏 Khoan đã... đọc lời chúc chưa đó?",
-  "😆 Lì xì dễ vậy sao! Đọc xong mới cho nha~"
+  "😆 Lì xì dễ vậy sao! Đọc xong mới cho nha~",
+ 
 ];
 
 function openWish(){
@@ -234,7 +236,7 @@ function openWish(){
 }
 
 function openLucky(){
-  if(!hasReadWish && trollStep<2){
+  if(!hasReadWish && trollStep < trollText.length){
     troll();
     return;
   }
