@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧧 TẾT 2026 — GOD MODE NGỰA 77 🐎</title>
+<title>🧧 Chúc mừng năm Bính Ngọ 2026 🐎</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
@@ -27,17 +27,16 @@ body{
   align-items:center;
   overflow:hidden;
   font-family:'Quicksand',sans-serif;
-  perspective:1200px;
 }
 
-/* BACKGROUND LIGHT */
+/* BACKGROUND EFFECT */
 .bgLight{
   position:fixed;
   inset:0;
   background:
     radial-gradient(circle at 20% 20%,rgba(255,255,255,.12),transparent 30%),
     radial-gradient(circle at 80% 40%,rgba(255,255,255,.12),transparent 30%),
-    radial-gradient(circle at 50% 80%,rgba(255,215,120,.2),transparent 40%);
+    radial-gradient(circle at 50% 80%,rgba(255,215,120,.25),transparent 40%);
   animation: shimmer 8s infinite alternate;
 }
 
@@ -46,20 +45,19 @@ body{
   to{opacity:1}
 }
 
-/* NGUA 77 */
 .horse77{
   position:fixed;
-  font-size:130px;
-  opacity:.12;
+  font-size:140px;
+  opacity:.15;
   animation: horseFloat 8s infinite ease-in-out;
 }
 
 @keyframes horseFloat{
   0%,100%{transform:translateY(0) rotate(0)}
-  50%{transform:translateY(-15px) rotate(3deg)}
+  50%{transform:translateY(-18px) rotate(3deg)}
 }
 
-/* ================= ENVELOPE ================= */
+/* MAIN CARD */
 .envelope{
   width:94%;
   max-width:520px;
@@ -70,8 +68,6 @@ body{
   border:4px solid var(--gold);
   box-shadow:0 0 60px rgba(255,200,80,.9);
   position:relative;
-  transform-style:preserve-3d;
-  transition:.6s cubic-bezier(.25,.8,.25,1);
   animation:float 4s ease-in-out infinite;
   backdrop-filter: blur(6px);
 }
@@ -88,7 +84,7 @@ h1{
   text-shadow:0 0 14px rgba(255,200,100,.9);
 }
 
-/* ================= BUTTON ================= */
+/* BUTTON */
 button{
   width:100%;
   padding:15px;
@@ -105,11 +101,11 @@ button{
 }
 
 button:hover{
-  transform:scale(1.08);
+  transform:scale(1.06);
   filter:brightness(1.1);
 }
 
-/* ================= CONTENT ================= */
+/* CONTENT */
 .content{
   display:none;
   margin-top:15px;
@@ -132,7 +128,7 @@ button:hover{
   box-shadow: inset 0 0 18px rgba(255,120,160,.4);
 }
 
-/* ================= SPIN ================= */
+/* SPIN */
 .spinBox{
   margin:20px auto;
   width:200px;
@@ -155,7 +151,7 @@ button:hover{
   to{transform:rotate(2160deg)}
 }
 
-/* ================= MODAL ================= */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -190,7 +186,29 @@ button:hover{
   box-shadow:0 0 22px rgba(255,180,60,.9);
 }
 
-/* ================= FALL ================= */
+/* MUSIC */
+.musicBtn{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--red),var(--gold));
+  border:none;
+  color:white;
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 22px rgba(255,200,80,.95);
+  cursor:pointer;
+  z-index:9999;
+}
+
+.spinIcon{ animation:spin 3s linear infinite }
+
+/* FALL */
 .fall{
   position:fixed;
   top:-20px;
@@ -210,28 +228,6 @@ canvas{
   inset:0;
   pointer-events:none;
 }
- .musicBtn{
-  position:fixed;
-  bottom:18px;
-  right:18px;
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--red),var(--gold));
-  border:none;
-  color:white;
-  font-size:24px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 0 22px rgba(255,200,80,.95);
-  cursor:pointer;
-  z-index:9999;
-}
-
-.spinIcon{
-  animation:spin 3s linear infinite;
-} 
 </style>
 </head>
 
@@ -242,7 +238,7 @@ canvas{
 
 <canvas id="fireworks"></canvas>
 
-<div class="envelope" id="card">
+<div class="envelope">
   <h1>🧧 Chúc mừng năm Bính Ngọ 2026 🧧</h1>
 
   <button ondblclick="openWish()">💌 Ấn đúp mở lời chúc</button>
@@ -269,7 +265,7 @@ canvas{
   </div>
 </div>
 
-<!-- MODAL QR -->
+<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modalBox">
     <h3>🎉 Nhận lì xì 🎉</h3>
@@ -280,6 +276,12 @@ canvas{
     <button onclick="closeModal()">Đóng</button>
   </div>
 </div>
+
+<!-- MUSIC -->
+<button class="musicBtn" id="musicBtn">🎵</button>
+<audio id="music" loop>
+  <source src="./music/tet.mp3.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const wish=document.getElementById("wish");
@@ -306,7 +308,6 @@ function spin(){
   spinBox.classList.remove("spinAnim");
   void spinBox.offsetWidth;
   spinBox.classList.add("spinAnim");
-
   setTimeout(()=>{
     modal.style.display="flex";
     boom();
@@ -315,6 +316,34 @@ function spin(){
 
 function closeModal(){
   modal.style.display="none";
+}
+
+/* MUSIC */
+const music=document.getElementById("music");
+const musicBtn=document.getElementById("musicBtn");
+let musicStarted=false;
+
+function autoPlayMusic(){
+  if(!musicStarted){
+    music.play().then(()=>{
+      musicStarted=true;
+      musicBtn.classList.add("spinIcon");
+    }).catch(()=>{});
+  }
+}
+
+document.addEventListener("click",autoPlayMusic,{once:true});
+document.addEventListener("touchstart",autoPlayMusic,{once:true});
+
+musicBtn.onclick=(e)=>{
+  e.stopPropagation();
+  if(music.paused){
+    music.play();
+    musicBtn.classList.add("spinIcon");
+  }else{
+    music.pause();
+    musicBtn.classList.remove("spinIcon");
+  }
 }
 
 /* FALL */
@@ -372,42 +401,8 @@ function draw(){
   });
   requestAnimationFrame(draw);
 }
-
 draw();
-  /* ===== MUSIC ===== */
-const music = document.getElementById("music");
-const musicBtn = document.getElementById("musicBtn");
-let musicStarted = false;
-
-// Auto play fix iOS
-function autoPlayMusic(){
-  if(!musicStarted){
-    music.play().then(()=>{
-      musicStarted = true;
-      musicBtn.classList.add("spinIcon");
-    }).catch(()=>{});
-  }
-}
-
-document.addEventListener("click", autoPlayMusic, { once:true });
-document.addEventListener("touchstart", autoPlayMusic, { once:true });
-
-// Toggle music
-musicBtn.onclick = (e)=>{
-  e.stopPropagation();
-  if(music.paused){
-    music.play();
-    musicBtn.classList.add("spinIcon");
-  }else{
-    music.pause();
-    musicBtn.classList.remove("spinIcon");
-  }
-};
 </script>
-<button class="musicBtn" id="musicBtn">🎵</button>
 
-<audio id="music" loop>
-  <source src="./music/tet.mp3.mp3" type="audio/mpeg">
-</audio>
 </body>
 </html>
